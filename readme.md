@@ -87,13 +87,13 @@ SQL, Structured Query Language, is a specialized language used to create, manipu
 
   ```sql
   CREATE TABLE people (
-    id serial primary key,
+    id SERIAL PRIMARY KEY,
     name TEXT,
     age INTEGER
   );
 
   CREATE TABLE pets (
-    id SERIAL primary key,
+    id SERIAL PRIMARY KEY,
     name TEXT,
     age INTEGER,
     breed TEXT,
