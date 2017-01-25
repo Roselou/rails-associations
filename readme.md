@@ -18,7 +18,7 @@ ActiveRecord manages the schemas, models, and the structure of our relational da
 <!-- specific/measurable goal for students to achieve -->
 *After this workshop, developers will be able to:*
 
-* Describe how relational databases can be used to create relationships between resources.  
+* Describe how relational databases can be used to create associations between resources.  
 * Create one to-many-model relationships in Rails.  
 * Create many to-many-model relationships in Rails.  
 
