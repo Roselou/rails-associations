@@ -88,6 +88,12 @@ SQL, Structured Query Language, is a specialized language used to create, manipu
 <details><summary>Click for a simple SQL example that you can run in `psql`</summary>
 
   ```sql
+  CREATE DATABASE pet_people_practice_db;
+  
+  -- next command is a postgres command (and this line is a comment!)
+  -- connect to the new database
+  \c book_author_practice_db
+  
   CREATE TABLE people (
     id SERIAL PRIMARY KEY,
     name TEXT,
