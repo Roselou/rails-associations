@@ -341,8 +341,13 @@ To create N:N relationships in Rails, we use this pattern: `has_many :related_mo
   end
   ```
 
-    <details><summary>Could we have done this from the command-line?</summary>
-    `rails g model Enrollment course:belongs_to student:belongs_to`</details>
+Could we have done this from the command-line?
+
+Yes:
+
+
+    `rails g model Enrollment course:belongs_to student:belongs_to`
+    
 
 
 3. Open up the models in your text editor, and edit them so they include the proper associations:
