@@ -65,7 +65,7 @@ Relational databases were invented in the 1970's as a way to structure data so t
 
 **Foreign Key:** a foreign key is a field in one table that uniquely identifies a row of another table.
 
-####What is SQL?
+#### What is SQL?
 
 SQL, Structured Query Language, is a specialized language used to create, manipulate, and query tables in relational databases.
 
