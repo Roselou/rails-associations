@@ -33,15 +33,7 @@ ActiveRecord manages the schemas, models, and the structure of our relational da
 In this lesson we'll talk about how tables in a relational database relate to each other and how to take advantage of those relationships in Rails apps.
 
 
-### A Brief Foray into SQL
-
-> "In which we truly learn to appreciate ActiveRecord."
-
-
-#### What is a Relational Database (RDB)?
-
-Relational databases were invented in the 1970's as a way to structure data so that it can be queried by a "relational algebra." The basic idea of relational model, though, was to use collections of data, or "tables." Each table is organized like a spreadsheet with a row (also known as "record") for each data item and with attributes of those items arranged in columns.
-
+### A Brief Reminder About SQL
 
 **Authors Table**
 
@@ -61,29 +53,7 @@ Relational databases were invented in the 1970's as a way to structure data so t
 | 4 | Through the Looking-Glass | 1871 | 9781489500182 | 2 |
 | 5 | The Time Machine |  1895  | 9781423794417 | 3 |
 
-**Primary Key:** The primary key of a relational table uniquely identifies each record in the table. 
-
-**Foreign Key:** a foreign key is a field in one table that uniquely identifies a row of another table.
-
-#### What is SQL?
-
-SQL, Structured Query Language, is a specialized language used to create, manipulate, and query tables in relational databases.
-
-* Data **Definition** Language
-  * Define and update database's structure
-  * `CREATE`, `ALTER`, `RENAME`, `DROP`, `TRUNCATE`
-  * Data Types
-  * Constraints
-* Data **Manipulation** Language
-  * CRUD data within the database
-  * `SELECT`, `INSERT`, `UPDATE`, `DELETE`, `ORDER BY`    
-  * `UPSERT` (attempts an UPDATE, or on failure, INSERT)
-  * Queries
-  * `JOIN`s
-  * Aggregation: `GROUP BY`, `SUM`, `AVG`, `MIN`
-* Data **Control** Language (beyond our scope)
-  * `GRANT` access to parts of the table
-
+**Primary Key:** The primary key of a relational table uniquely identifies each record in the table. When we use a SERIAL data type in postgres, this creates a primary key; it's an ID that will be unique to that row.
 
 <details><summary>Click for a simple SQL example that you can run in `psql`</summary>
 
@@ -156,7 +126,7 @@ JOINS are our means of implementing queries that join together data from multipl
 
 ### Associations: Relationships Between Models
 
-| Relationship Type | Abbreviation | Description | Example |
+| Association Type | Abbreviation | Description | Example |
 | :--- | :--- | :--- | :--- |
 | One-to-One | 1:1 | An instance of one model is associated with one (and only one) instance of another model | One author can have one primary mailing address. |
 | One-to-Many | 1:N | Parent model is associated with many children from another model | One author can have many books. |
@@ -164,17 +134,17 @@ JOINS are our means of implementing queries that join together data from multipl
 
 
 
-### One-To-Many (1:N) Relationship
+### One-To-Many (1:N) Association
 
 **Example:** One owner `has_many` pets and a pet `belongs_to` one owner (our `Pet` model will have a foreign key (FK) `owner_id`). The foreign key always goes on the table with the data that belongs to data from another table. In this example, a person **has_many** pets, and a pet **belongs_to** a person. The foreign key `person_id` goes on the `pets` table to indicate which person the pet belongs to.
 
 ![](https://raw.githubusercontent.com/sf-wdi-18/notes/master/lectures/week-07/day-1-intro-sql/dawn-simple-queries/images/primary_foreign_key.png)
 
-**Always remember!** Most relational databases can only store one field, not an array of values. We need to store the information about the relationship on the side where just one value can keep all the necessary facts.  Whenever there is a `belongs_to` in the model, there should be a *FK in the matching migration!*  
+**Always remember!** Most relational databases can only store one field, not an array of values. We need to store the information about the relationship on the side where just one value can keep all the necessary facts.  Whenever there is a `belongs_to` in the model, there should be a *Foreign Key in the matching migration!*  
 
 <img src="https://chryus.files.wordpress.com/2014/02/img_1839.jpg" width="50%">
 
-#### Two steps to set up model relationships in Rails
+#### Two steps to set up associations in Rails
 
 Rails requires us to do two things to establish a relationship.  
 
@@ -223,7 +193,7 @@ class Pet < ActiveRecord::Base
 end
 ```
 
-Note: `belongs_to` uses the singular form of the class name (`:owner`), while `has_many` uses the pluralized form (`:pets`).  If we don't set `optional: true`, every pet will be *required* to have an owner. 
+Note: `belongs_to` uses the singular form of the class name (`:owner`), while `has_many` uses the pluralized form (`:pets`).  If we don't set `optional: true`, every pet will be *required* to have an owner.
 
 If you think about it, this is exactly how you'd want to say this in plain English. For example, if we were just discussing the relationship between pets and owners, we'd say:
 
@@ -293,12 +263,12 @@ end
 
 Make sure you then update the models with the appropriate `has_many` and `belongs_to` relationships.  
 
-<!-- ## Challenges, Part 1: 1:N
+## Challenges, Part 1: 1:N
 
 Head over to the [One-To-Many Challenges](one_to_many_challenges.md).
 
 -----
--->
+
 
 ## Many-To-Many (N:N) with 'through'
 
@@ -311,7 +281,7 @@ Courses
 | 1  |  MATH103      |   F16    |  
 | 2  |  ENGL200      |   F16    |   
 | 3  |  CHEM104      |   F16    |  
-| 4  |  COMP200      |   F16    | 
+| 4  |  COMP200      |   F16    |
 | 5  |  BSKT101      |   F16    |
 
 
@@ -324,7 +294,7 @@ Students
 | 3  |  Eliza       |  Bennet      |    
 
 
-**Check for understanding**: Where should we add the foreign key or keys? 
+**Check for understanding**: Where should we add the foreign key or keys?
 
 #### Join Tables
 
@@ -344,7 +314,7 @@ A *join* table has two different foreign keys, one for each model it is associat
 
 
 
-### Set Up
+### Many-to-many Setup 
 
 To create N:N relationships in Rails, we use this pattern: `has_many :related_model, through: :join_table_name`.  Here's the relevant section of the Rails [Active Record Associations](http://guides.rubyonrails.org/association_basics.html#the-has-many-association) Guide.
 
@@ -377,8 +347,13 @@ To create N:N relationships in Rails, we use this pattern: `has_many :related_mo
   end
   ```
 
-    <details><summary>Could we have done this from the command-line?</summary>
-    `rails g model Enrollment course:belongs_to student:belongs_to`</details>
+Could we have done this from the command-line?
+
+Yes:
+
+
+    `rails g model Enrollment course:belongs_to student:belongs_to`
+    
 
 
 3. Open up the models in your text editor, and edit them so they include the proper associations:
@@ -462,11 +437,11 @@ To create N:N relationships in Rails, we use this pattern: `has_many :related_mo
   # => ["English", "Algebra"]
   ```
   
-<!--
+
 ## Challenges, Part 2: Many-To-Many
 
 Head over to the [Many-To-Many Challenges](many_to_many_challenges.md) and work together in pairs.
--->
+
 
 ## Self-Referencing Associations
 
