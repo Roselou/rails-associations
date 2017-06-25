@@ -18,7 +18,7 @@ ActiveRecord manages the schemas, models, and the structure of our relational da
 <!-- specific/measurable goal for students to achieve -->
 *After this workshop, developers will be able to:*
 
-* Describe how relational databases can be used to create relationships between resources.  
+* Describe how relational databases can be used to create associations between resources.  
 * Create one to-many-model relationships in Rails.  
 * Create many to-many-model relationships in Rails.  
 
@@ -58,6 +58,12 @@ In this lesson we'll talk about how tables in a relational database relate to ea
 <details><summary>Click for a simple SQL example that you can run in `psql`</summary>
 
   ```sql
+  CREATE DATABASE pet_people_practice_db;
+  
+  -- next command is a postgres command (and this line is a comment!)
+  -- connect to the new database
+  \c book_author_practice_db
+  
   CREATE TABLE people (
     id SERIAL PRIMARY KEY,
     name TEXT,
@@ -102,7 +108,7 @@ In this lesson we'll talk about how tables in a relational database relate to ea
 
 #### Why Are Joins Important?
 
-Each table in a relational database is considered a relation. All the data is naturally related by a single set of attributes defined for the table. However, in order to be a relational database, we need to be able to make queries between different relations or tables of data.
+Each table in a relational database is considered a relation. All the data is naturally related by a single set of attributes defined for the table. However, in order to use a relational database, we often need to be able to make queries between different relations or tables of data.
 
 JOINS are our means of implementing queries that join together data from multiple tables and show results.
 
@@ -120,7 +126,7 @@ JOINS are our means of implementing queries that join together data from multipl
 
 ### Associations: Relationships Between Models
 
-| Relationship Type | Abbreviation | Description | Example |
+| Association Type | Abbreviation | Description | Example |
 | :--- | :--- | :--- | :--- |
 | One-to-One | 1:1 | An instance of one model is associated with one (and only one) instance of another model | One author can have one primary mailing address. |
 | One-to-Many | 1:N | Parent model is associated with many children from another model | One author can have many books. |
@@ -128,7 +134,7 @@ JOINS are our means of implementing queries that join together data from multipl
 
 
 
-### One-To-Many (1:N) Relationship
+### One-To-Many (1:N) Association
 
 **Example:** One owner `has_many` pets and a pet `belongs_to` one owner (our `Pet` model will have a foreign key (FK) `owner_id`). The foreign key always goes on the table with the data that belongs to data from another table. In this example, a person **has_many** pets, and a pet **belongs_to** a person. The foreign key `person_id` goes on the `pets` table to indicate which person the pet belongs to.
 
@@ -138,14 +144,14 @@ JOINS are our means of implementing queries that join together data from multipl
 
 <img src="https://chryus.files.wordpress.com/2014/02/img_1839.jpg" width="50%">
 
-#### Two steps to set up model relationships in Rails
+#### Two steps to set up associations in Rails
 
 Rails requires us to do two things to establish a relationship.  
 
 1. Database - create the foreign key
 2. Models - tell Rails about the relationship so it makes convenient methods
 
-**First: Database** we need to add an `other_id` foreign key column in the database.  
+**First: Database** We need to add an `other_id` foreign key column in the database.  
 
 This column will be on the model that **belongs_to** the parent model.  
 
@@ -166,12 +172,12 @@ end
 <details><summary>What's the difference between `t.integer`, `t.references`, and `t.belongs_to`?</summary>
 
 * `t.integer :owner_id` is technically accurate since the column name should be `owner_id` and database IDs are integers.
-* `t.references :owner` is a bit more semantic and readable and has a few bonuses:
+* `t.references :owner` is more semantic and readable and has a few bonuses:
 
   1. It defines the name of the foreign key column (in this case, `owner_id`) for us.
   2. It adds a **foreign key constraint** which ensures **referential data integrity**[4][4]  in our Postgresql database.
 
-* `t.belongs_to :owner` is even more semantic and Railsy. It does the same thing as `t.references`, but it has the added benefit of being super semantic for anyone reading your migrations later on.
+* `t.belongs_to :owner` is another option. It does the same thing as `t.references`, but it has the added benefit of being super semantic for anyone reading your migrations later on, if it accurately reflects the association.
 </details>
 
 
@@ -263,9 +269,10 @@ Head over to the [One-To-Many Challenges](one_to_many_challenges.md).
 
 -----
 
+
 ## Many-To-Many (N:N) with 'through'
 
-**Example:** A student `has_many` courses and a course `has_many` students.  Here's what each table might look like:
+**Example:** A student `has_many` courses, and a course `has_many` students.  Here's what each table might look like:
 
 Courses
 
@@ -287,8 +294,7 @@ Students
 | 3  |  Eliza       |  Bennet      |    
 
 
-**Check for understanding**: Where should we add the foreign key?
-
+**Check for understanding**: Where should we add the foreign key or keys?
 
 #### Join Tables
 
@@ -308,7 +314,7 @@ A *join* table has two different foreign keys, one for each model it is associat
 
 
 
-### Set Up
+### Many-to-many Setup 
 
 To create N:N relationships in Rails, we use this pattern: `has_many :related_model, through: :join_table_name`.  Here's the relevant section of the Rails [Active Record Associations](http://guides.rubyonrails.org/association_basics.html#the-has-many-association) Guide.
 
@@ -424,29 +430,30 @@ Yes:
   sally.courses.map { |course| course.name }
   # => ["Algebra", "French"]
 
-  fred.courses.map(&:name)  # short-hand!
+  fred.courses.map { |course| course.name }
   # => ["Science", "English", "French"]
 
-  alice.courses.map(&:name)
+  alice.courses.map(&:name)  # shorthand
   # => ["English", "Algebra"]
   ```
+  
 
 ## Challenges, Part 2: Many-To-Many
 
 Head over to the [Many-To-Many Challenges](many_to_many_challenges.md) and work together in pairs.
 
 
-## Note: Self-Referencing Associations
+## Self-Referencing Associations
 
-Lots of real-world apps create associations between items that are the same type of resource.  Read (or reread) <a href="http://guides.rubyonrails.org/association_basics.html#self-joins" >the "self joins" section of the Associations Basics Rails Guide</a>, and try to create a self-referencing association in your `practice_associations` app. (Classic use cases are friends and following, where both related resources would be users.)
+Lots of real-world apps create associations between items that are the same type of resource.  Read (or reread) <a href="http://guides.rubyonrails.org/association_basics.html#self-joins" >the "self joins" section of the Associations Basics Rails Guide</a>. As a stretch challenge, create a self-referencing association in your `practice` app. Classic use cases for self-referencing are friends and following, where both related resources would be users. For you app, try to make it so that each actor has many "followers" who are actors. To take it one step further, give each actor many actors who are "following" them. 
 
 ## Helpful Hints
 
-When you're **creating associations** in Rails Active Record (or most any ORM, for that matter):
+When you're **creating associations** in Rails Active Record (or almost any ORM, for that matter):
 
-  * Define the relationships in your models (the blueprint for your objects)
-    * Don't forget to define all sides of the relationship (e.g. `has_many` and `belongs_to`)
-  * Remember to put the foreign key for a relationship in your migration
+  * Define the relationships in your models (the blueprint for your records).
+    * Don't forget to define all sides of the relationship (e.g. `has_many` and `belongs_to`).
+  * Remember to put the foreign key for a relationship in your migration.
     * If you're not sure which side of the relationship has the foreign key, just use this simple rule: the model with `belongs_to` must include a foreign key.
 
 ## Less Common Associations
@@ -457,6 +464,6 @@ These are for your references but are not used nearly as often as `has_many` and
   * <a href="http://guides.rubyonrails.org/association_basics.html#the-has-one-through-association">has_one through</a>
   * <a href="http://guides.rubyonrails.org/association_basics.html#has-and-belongs-to-many-association-reference">has_and_belongs_to_many</a>
 
-## Useful Docs
+## Resources
 
 * <a href="http://guides.rubyonrails.org/association_basics.html">Associations Rails Guide</a>
