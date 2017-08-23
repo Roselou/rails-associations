@@ -1,6 +1,6 @@
 <!--
 Creator: Team
-Last Edited by: Brianna
+Last Edited by: Michelle
 Location: SF
 -->
 
@@ -59,11 +59,11 @@ In this lesson we'll talk about how tables in a relational database relate to ea
 
   ```sql
   CREATE DATABASE pet_people_practice_db;
-  
+
   -- next command is a postgres command (and this line is a comment!)
   -- connect to the new database
-  \c book_author_practice_db
-  
+  \c pet_people_practice_db
+
   CREATE TABLE people (
     id SERIAL PRIMARY KEY,
     name TEXT,
@@ -314,7 +314,7 @@ A *join* table has two different foreign keys, one for each model it is associat
 
 
 
-### Many-to-many Setup 
+### Many-to-many Setup
 
 To create N:N relationships in Rails, we use this pattern: `has_many :related_model, through: :join_table_name`.  Here's the relevant section of the Rails [Active Record Associations](http://guides.rubyonrails.org/association_basics.html#the-has-many-association) Guide.
 
@@ -353,7 +353,7 @@ Yes:
 
 
     `rails g model Enrollment course:belongs_to student:belongs_to`
-    
+
 
 
 3. Open up the models in your text editor, and edit them so they include the proper associations:
@@ -436,7 +436,7 @@ Yes:
   alice.courses.map(&:name)  # shorthand
   # => ["English", "Algebra"]
   ```
-  
+
 
 ## Challenges, Part 2: Many-To-Many
 
@@ -445,7 +445,7 @@ Head over to the [Many-To-Many Challenges](many_to_many_challenges.md) and work 
 
 ## Self-Referencing Associations
 
-Lots of real-world apps create associations between items that are the same type of resource.  Read (or reread) <a href="http://guides.rubyonrails.org/association_basics.html#self-joins" >the "self joins" section of the Associations Basics Rails Guide</a>. As a stretch challenge, create a self-referencing association in your `practice` app. Classic use cases for self-referencing are friends and following, where both related resources would be users. For you app, try to make it so that each actor has many "followers" who are actors. To take it one step further, give each actor many actors who are "following" them. 
+Lots of real-world apps create associations between items that are the same type of resource.  Read (or reread) <a href="http://guides.rubyonrails.org/association_basics.html#self-joins" >the "self joins" section of the Associations Basics Rails Guide</a>. As a stretch challenge, create a self-referencing association in your `practice` app. Classic use cases for self-referencing are friends and following, where both related resources would be users. For you app, try to make it so that each actor has many "followers" who are actors. To take it one step further, give each actor many actors who are "following" them.
 
 ## Helpful Hints
 
