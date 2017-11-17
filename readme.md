@@ -467,4 +467,4 @@ These are for your references but are not used nearly as often as `has_many` and
 ## Resources
 
 * <a href="http://guides.rubyonrails.org/association_basics.html">Associations Rails Guide</a>
-* [Associations Review](https://github.com/SF-WDI-LABS/rails-migrations-and-associations/tree/associations)
+* [Associations Review](https://github.com/SF-WDI-LABS/rails-associations/tree/associations) (see the associations branch of this repo)
