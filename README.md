@@ -1,14 +1,15 @@
 # Rails Associations
 
-Download this repository! Open:
+Download this branch! You'll need:
 
 * Code editor
 * 3 terminal tabs: 1 for your rails server, rails console, and regular command line
-* Open the cheatsheet for quick commands!
-* Open a browser tab to: 
+* Open the CHEATSHEET.md for quick commands!
+* Open a browser tab to: http://guides.rubyonrails.org/association_basics.html
 
 ### Setup
 
+From your terminal, navigate to the associations folder you just downloaded:
 ```bash
 bundle install
 rails db:create
@@ -16,8 +17,10 @@ rails db:create
 # Example models already exist! Just migrate them.
 rails db:migrate
 ```
+
 ### Example 1: One to Many
-These models are already created within this application. These were the commands used
+
+The sample models are already created within this application. These were the commands used
 to create them.
 
 ```bash
@@ -49,8 +52,8 @@ carrie = Book.create(title: 'Carrie')
 
 # Since authors can write many books, we keep those books in an Arrray.
 # You add books to that array the same way you'd add anything to an array:
-s_king.books << carrie
 
+s_king.books << carrie
 Book.all
 ```
 So in a one-to-many association:
