@@ -91,8 +91,8 @@ A `Software` belongs to `Company`.
 A `Company` has one `Software`.
 
 Within this application, create the following one-to-many association:
-* Software: name (string), company
 * Company: name (string)
+* Software: name (string), company
 
 Make sure that `Company.software` is read-only!
 
