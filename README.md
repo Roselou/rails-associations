@@ -72,8 +72,8 @@ A `Car` belongs to one `Owner`.
 An `Owner` has many `Car`s.
 
 Within this application, create the following one-to-many association:
-* Car: make (string), year (string), owner
 * Owner: name (string)
+* Car: make (string), year (string), owner
 
 Use the cheatsheet and the examples above to help you along the way. To get an in-depth
 explanation of rails models, migrations and associations, always refer first to the
@@ -81,7 +81,7 @@ official documentation:
 
 - http://guides.rubyonrails.org/association_basics.html
 
-Next, visit the Github repository and take a look at the manytomany branch. It will have
+Next, visit this Github repository and take a look at the manytomany branch. It will have
 more instructions, examples, and exercises.
 
 You can do those exercises in this very same associations app! Use the examples on the 

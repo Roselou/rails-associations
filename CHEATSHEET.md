@@ -17,6 +17,12 @@ rails generate -h | less
 # The -T flag instructs rails not to produce tests. -d selects a database
 rails new appname -T -d postgresql
 
+# Database creation
+rails db:create
+
+# When you create new models, run migrations
+rails db:migrate
+
 # Generate ...
 rails g model ModelName
 rails g controller Controllersname
@@ -24,6 +30,9 @@ rails g migration MigrationName
 
 # Other
 rails console
+
+# If you download an existing app, load the database schema
+rails db:schema:load
 ```
 
 # Sublime 
